@@ -65,8 +65,8 @@ class WikiArtFetcher:
             for group in self.painting_groups:
                 for painting in group:
                     filename = os.path.join(imgs_dir,
-                                        str(painting['contentId']) +
-                                        settings.SAVE_IMAGES_IN_FORMAT)
+                                            str(painting['contentId']) +
+                                            settings.SAVE_IMAGES_IN_FORMAT)
                     if not os.path.exists(filename):
                         Logger.error('painting %i is missing.'
                                      % painting['contentId'])
@@ -123,8 +123,10 @@ class WikiArtFetcher:
             self.painting_groups.append(self.fetch_paintings(artist))
 
             if i % show_progress_at == 0:
-                Logger.info('|-%i%% completed\n|--------------'
-                            % (100 * (i + 1) // len(self.artists)))
+                Logger.write('|--------------\n'
+                             '|-%i%% completed\n'
+                             '|--------------'
+                             % (100 * (i + 1) // len(self.artists)))
 
         return self
 
