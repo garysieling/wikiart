@@ -50,16 +50,14 @@ class WikiArtFetcher:
         if only in ('artists', 'all'):
             # Check for artists file.
             if not os.path.exists(os.path.join(meta_dir, 'artists.json')):
-                Logger.error('artists.json is missing.')
+                Logger.warning('artists.json is missing.')
 
         if only in ('paintings', 'all'):
             for artist in self.artists:
                 filename = os.path.join(meta_dir, artist['url'] + '.json')
-                if os.path.exists(filename):
-                    Logger.write('.', end='')
-                else:
-                    Logger.error('%s\'s paintings file is missing.'
-                                 % artist['url'])
+                if not os.path.exists(filename):
+                    Logger.warning('%s\'s paintings file is missing.'
+                                   % artist['url'])
 
             # Check for paintings copies.
             for group in self.painting_groups:
@@ -68,8 +66,8 @@ class WikiArtFetcher:
                                             str(painting['contentId']) +
                                             settings.SAVE_IMAGES_IN_FORMAT)
                     if not os.path.exists(filename):
-                        Logger.error('painting %i is missing.'
-                                     % painting['contentId'])
+                        Logger.warning('painting %i is missing.'
+                                       % painting['contentId'])
 
         return self
 
@@ -86,7 +84,7 @@ class WikiArtFetcher:
             with open(path, encoding='utf-8') as f:
                 self.artists = json.load(f)
 
-            Logger.info('Skipped.')
+            Logger.info('skipped')
             return self
 
         elapsed = time.time()
@@ -127,7 +125,6 @@ class WikiArtFetcher:
                              '|-%i%% completed\n'
                              '|--------------'
                              % (100 * (i + 1) // len(self.artists)))
-
         return self
 
     def fetch_paintings(self, artist):
@@ -135,7 +132,7 @@ class WikiArtFetcher:
 
         :param artist: dict, artist who should have their paintings retrieved.
         """
-        Logger.write('|-fetching %s\'s paintings'
+        Logger.write('|- %s\'s paintings'
                      % artist['artistName'], end='', flush=True)
         elapsed = time.time()
 
@@ -147,7 +144,7 @@ class WikiArtFetcher:
         if os.path.exists(filename) and not self.override:
             with open(filename, 'r', encoding='utf-8') as f:
                 data = json.load(f)
-            Logger.write(' Skipped')
+            Logger.write(' (s)')
             return data
 
         try:
@@ -207,7 +204,7 @@ class WikiArtFetcher:
 
     def download_hard_copy(self, painting):
         """Download A Copy of A Painting."""
-        Logger.write('|-downloading "%s"...' % painting.get('url', painting.get('contentId')),
+        Logger.write('|- %s' % painting.get('url', painting.get('contentId')),
                      end=' ', flush=True)
         elapsed = time.time()
         url = painting['image']
@@ -219,7 +216,7 @@ class WikiArtFetcher:
                                 settings.SAVE_IMAGES_IN_FORMAT)
 
         if os.path.exists(filename) and not self.override:
-            Logger.write('Skipped')
+            Logger.write('(s)')
             return self
 
         try:
@@ -235,7 +232,7 @@ class WikiArtFetcher:
                 response.raw.decode_content = True
                 shutil.copyfileobj(response.raw, f)
 
-            Logger.write('Done (%.2f sec)' % (time.time() - elapsed))
+            Logger.write('(%.2f sec)' % (time.time() - elapsed))
 
         except Exception as error:
             Logger.write('%s' % str(error))
