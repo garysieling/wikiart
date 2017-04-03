@@ -61,7 +61,7 @@ class WikiArtMetadataConverter:
         paintings = sum(self.painting_groups, [])
 
         with open(path, 'w', encoding='utf-8') as f:
-            f.write(settings.LABELS_HEADER)
+            f.write(settings.PAINTINGS_HEADER)
             f.writelines(self.paintings_as_lines(paintings))
 
         Logger.write('(d)')
@@ -92,6 +92,8 @@ class WikiArtMetadataConverter:
 
     @classmethod
     def convert_to_lines(cls, iterable, attributes):
-        return [','.join(str(item[attribute] if attribute in item else '')
+        return [','.join(str(item[attribute])
+                         if item.get(attribute, None) is not None
+                         else ''
                          for attribute in attributes) + '\n'
                 for item in iterable]

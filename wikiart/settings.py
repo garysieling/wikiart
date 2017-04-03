@@ -11,7 +11,7 @@ License: MIT License (c) 2016
 BASE_URL = 'http://www.wikiart.org/en/App'
 
 # Base folder in which the files will be saved.
-BASE_FOLDER = './wikiartds'
+BASE_FOLDER = './wikiart'
 
 # Format in which the images will be saved.
 SAVE_IMAGES_IN_FORMAT = '.jpg'
@@ -54,7 +54,7 @@ or to report a bug.
 Attributes are:
 %s
 
-""" % ', '.join(())
+""" % ', '.join((PAINTING_ATTRIBUTES))
 
 # Set which attributes are considered when converting the artists' attributes
 # to a more common data set format.
