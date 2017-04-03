@@ -93,7 +93,7 @@ class WikiArtMetadataConverter:
     @classmethod
     def convert_to_lines(cls, iterable, attributes):
         return [','.join('' if item.get(attribute, None) is None else
-                         '"%s"' % item[attribute] if isinstance(item[attribute], str) else
+                         '"%s"' % item[attribute].replace('\n', ' ').rstrip() if isinstance(item[attribute], str) else
                          str(item[attribute])
                          for attribute in attributes) + '\n'
                 for item in iterable]
