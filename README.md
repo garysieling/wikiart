@@ -13,6 +13,12 @@ $ # Or...
 $ python3 __main__.py --datadir ./output
 ```
 
+To prevent errors on Windows, you should first run this:
+```
+chcp 65001
+```
+This prevents unicode errors printing artist names to the console.
+
 If you had to stop the downloading process, for some reason,
 you can resume it by simply `python3 __main__.py --datadir ./output`.
  The program wil scan `--datadir` and only download what's not there yet.
